@@ -7,6 +7,7 @@ class NegociacaoController{
         this._inputData = $('#data');
         this._inputQuantidade =  $('#quantidade');
         this._inputValor = $('#valor');
+        this._listaNegociacoes = new ListaNegociacoes();
 		
 	}
 
@@ -14,29 +15,27 @@ class NegociacaoController{
 		//isso cancela a atualização da pagina na hora de submeter
 		event.preventDefault();
 
-        //Quando geramos o array com ano, mês e dia, ele transforma cada item em uma string e adiciona o separado. Só que quando passamos o array '2016', '11', '12', o que é o reagrupamento por debaixo dos panos de cada item usando o separador ,.
-        //Existe no array o método join(), que une todos os itens e depois, forma uma string com separadores.
-        //let data = new Date(this._inputData.value.split('-'));
-        //... (reticências) posicionado antes do this, com este spread operator, indicamos que o array será desmembrado - e o primeiro item do array, e cada parâmetro do Date será posicionado na mesma ordem no construtor
-  		let data = new Date(...this._inputData
-            .value.split('-')
-            .map((item,indice) => item - indice % 2 )
-            //.map(function(item, indice) {
-            //    return item - indice % 2;
-            //}));
-        );
-        let negociacao = new Negociacao(
-            data,
+        this._listaNegociacoes.adiciona(this._criaNegociacao());
+        this._limpaFormulario();
+        console.log(this._listaNegociacoes.negociacoes);
+	}
+
+	_criaNegociacao(){
+		return new Negociacao(
+            DateHelper.textoParaData(this._inputData.value),
             this._inputQuantidade.value,
             this._inputValor.value
         );
+	}
 
-  		console.log(negociacao);
+	//o uso do underline _ ,que dizer que esse metodo so pode ser chamado pela propria classe,
+	//nesse caso NegociacaoController
+	_limpaFormulario(){
 
-  		let diaMesAno = negociacao.data.getDate()+ '/'
-  						+ (negociacao.data.getMonth()+1)
-  						+ '/' + negociacao.data.getFullYear();
+		this._inputData.value = '';
+		this._inputQuantidade.value = 1;
+		this._inputValor.value = 0.0;
 
-  		console.log(diaMesAno);
+		this._inputData.focus();
 	}
 }
