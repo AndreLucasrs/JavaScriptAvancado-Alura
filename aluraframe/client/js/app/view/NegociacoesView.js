@@ -1,10 +1,11 @@
-class NegociacoesView {
+class NegociacoesView extends View{
 
 	constructor(elemento){
-		this._elemento = elemento;
+
+		super(elemento);
 	}
 
-	_template(model){
+	template(model){
 		//usando template String
 		//template String js, usas-se isso ` `
 		//quando uso o join eu coloco como criterio junção uma String em branco,
@@ -61,11 +62,5 @@ class NegociacoesView {
             model.negociacoes.forEach(n => total+= n.volume);
             return total;
        })()*/
-
-
-	update(model){
-		//quando vc passa uma String para o innerHTML, ele converte para elemento do DOM
-		this._elemento.innerHTML = this._template(model);
-	}
 
 }
