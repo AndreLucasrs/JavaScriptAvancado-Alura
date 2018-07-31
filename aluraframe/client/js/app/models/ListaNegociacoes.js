@@ -1,12 +1,12 @@
 class ListaNegociacoes {
 
 	//constructor(contexto, armadilha) {
-	constructor(armadilha) {	
+	constructor() {	
 
         this._negociacoes = [];
         //isso ira fazer a tela se atualizar sempre, pq o parametro passado é uma função anonima de update
         //essa armadilha sempre sera chamado no adiciona ou no esvazia
-        this._armadilha = armadilha;
+        //this._armadilha = armadilha;
         //this._contexto = contexto;
     }
 
@@ -15,7 +15,7 @@ class ListaNegociacoes {
         this._negociacoes.push(negociacao);
         //o model é a instancia de listaNegociacoes esta passando quando esta sendo chamada
         //esse this dentro da armadilha esta recebendo a propria estancia de quem esta chamando-a
-        this._armadilha(this);
+        //this._armadilha(this);
         //Reflect.apply(this._armadilha,this._contexto,[this]);
     }
 
@@ -30,7 +30,7 @@ class ListaNegociacoes {
 	esvazia(){
 
 		 this._negociacoes =[];
-		 this._armadilha(this);
+		 //this._armadilha(this);
 		 //Reflect.apply(this._armadilha,this._contexto,[this])
 	}
 
