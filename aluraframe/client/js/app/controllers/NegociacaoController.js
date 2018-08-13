@@ -1,6 +1,10 @@
 class NegociacaoController{
 
+	//OBS para fazer o botão importar negociações funcionar, tem que rodar o server
+	//entre na pasta serve e de um npm start
+	//agora bastra abrir o http://localhost:3000
 	constructor(){
+		this._ordemAtual = '';
 		//Se declaramos as variáveis usando o let, estas ganharam um escopo de bloco	
 		//estamos informando que o querySelector irá para a variável $, mas ainda manterá uma associação com document
 		let $ = document.querySelector.bind(document);
@@ -21,7 +25,7 @@ class NegociacaoController{
         // 	this._negociacoesView.update(model));
 
         this._listaNegociacoes = new Bind(new ListaNegociacoes(),
-        	new NegociacoesView($("#negociacoesView")),'adiciona','esvazia');
+        	new NegociacoesView($("#negociacoesView")),'adiciona','esvazia','ordena','inverteOrdem');
 
         this._mensagem = new Bind(new Mensagem(),
         	new MensagemView($("#mensagemView")),'texto');
@@ -39,20 +43,26 @@ class NegociacaoController{
         this._limpaFormulario();
 	}
 
-	importaNegociacoes(){
+	importaNegociacoes() {
 
-		let service = new NegociacaoService();
-		service.obterNegociacoesDaSemana((erro,negociacoes)=>{
+        let service = new NegociacaoService();
+        service
+        .obterNegociacoes()
+        .then(negociacoes => {
+        	negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+        	this._mensagem.texto = 'Negociações do período importadas com sucesso';
+        })
+        .catch(error => this._mensagem.texto = error);  
+    }
 
-			if(erro){
-				this._mensagem.texto = erro;
-				return;
-			}
-
-			negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
-			this._mensagem.texto = "Negociacões importadas com sucesso";
-		});		
-	}
+    ordena(coluna) {
+        if(this._ordemAtual == coluna) {
+            this._listaNegociacoes.inverteOrdem();
+        } else {
+            this._listaNegociacoes.ordena((a, b) => a[coluna] - b[coluna]);    
+        }
+        this._ordemAtual = coluna;
+    }
 
 	apaga(){
 
