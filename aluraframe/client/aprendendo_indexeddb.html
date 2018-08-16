@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Aprendendo IntexedDB</title>
+</head>
+<body>
+	<script src="js/app/models/Negociacao.js"></script>
+	<script>
+
+		var connection;
+
+		//rodo essa pagina, abra o devtool clica em Application, e clica em indexedDB
+		//vc ira ver o banco criado e conectado
+
+		//O método indexedDB.open() retorna uma instância de IDBOpenDBRequest, ou seja, uma requisição de abertura do banco.
+		//indexedDB e um banco no navegador
+		//open tem dois paramentros um é o nome do banco e o segundo a versão do banco
+		//pra vc atualizar esse banco vc precisa trocar no numero da versao
+		var openRequest = window.indexedDB.open('aluraframe',7);
+
+		//triade de eventos são onupgradeneeded,onsuccess,onerror
+
+		//ele vai criar ou alterar um banco existente 
+		openRequest.onupgradeneeded = e => {
+
+			console.log("ele vai criar ou alterar um banco existente ");
+
+			let minhaConnection = e.target.result;
+
+		    if(minhaConnection.objectStoreNames.contains('negociacoes')) {
+		    	minhaConnection.deleteObjectStore('negociacoes');
+		    }
+
+			//o segundo parametro do createObjectStore, se refere a chafe unica, nesse caso sendo gerada automatica
+			minhaConnection.createObjectStore('negociacoes', { autoIncrement: true });
+		};
+
+		//vai ser sempre executado quando conseguir uma conexão
+		openRequest.onsuccess = e => {
+		
+			console.log("conexão obtida com sucesso");
+
+			connection = e.target.result;
+		};	
+
+		//vai ser executado so quando tiver algum problema de conexão por algum motivo
+		openRequest.onerror = e => console.log(e.target.console.error);
+
+		function adiciona(){
+
+			//toda vez que for gravar no Object store primeiro preciso pedir uma transação e dizer qual é o Object store da transação e o tipo
+			let transaction = connection.transaction(['negociacoes'],'readwrite');
+
+			//dessa transação acima eu tenho acesso ao objectStore
+			let store = transaction.objectStore('negociacoes');
+
+			//crio uma instancia
+			let negociacao = new Negociacao(new Date(), 200, 1);
+
+			//desse object store eu tenho um metodo add que permite adicionar um objeto dentro dele
+			//mas o add me retorna uma requisição para poder adicionar
+			let request = store.add(negociacao);
+
+			request.onsuccess = e => console.log("Negociação incluida com sucesso");
+
+			request.onerror = e => console.log("Não foi possivel incluir a negociação");
+		}
+
+		function listaTodos(){
+
+			let transaction = connection.transaction(['negociacoes'],'readwrite');
+
+			let store = transaction.objectStore('negociacoes');
+
+			let cursor = store.openCursor();
+
+			let negociacoes = [];
+
+			//onsuccess é chamado toda vez que cria um cursor
+			//toda vez que ele for criado ele ira me retornar um ponteiro
+			cursor.onsuccess = e => {
+
+				//e.target.result é o que retorna o ponteiro, ele vai apontar para o primeiro objeto da minha object store se tiver
+				let atual = e.target.result;
+
+				//vc verifica se a dado
+				if(atual){
+
+					//se a um ponteiro valido com esse atual.value ele pego o valor que a dentro dele
+					let dado = atual.value;
+
+					//como o dado que é salvo no object store é so um json com os atributos
+					//aqui para enserir em negociacao eu vou criar uma instancia de Negociacao e passar o valor para esta instancia
+					negociacoes.push(new Negociacao(dado._data,dado._quantidade,dado._valor));
+
+					//aqui eu chamo ele passar para o proximo, isso quer dizer ele vai chamar o onsucess novamente, enquanto tiver dado ele ira cair nesse if, quando não houver mais ele ira cair no else
+					atual.continue();
+				}else{
+					console.log(negociacoes);
+				}
+			};
+
+			cursor.onerror = e => console.log(e.target.error.name);
+
+		}
+
+	</script>
+</body>
+</html>
+
+<!-- 
+EXPLICAÇÃO Sobre o Codigo
+
+O result será o IDBDatabase, ou seja, uma conexão que estamos guardando dentro da variável connection que está no escopo maior. Mas antes de começarmos a interagir com o banco, adicionaremos uma Object Store, que é bastante semelhantes às tabelas dos bancos de dados relacionais. Dentro da aluraframe teremos várias Object Stores, no entanto, não é correto chamá-las de tabelas, porque elas não possuem esquemas. Diferente de um banco de dados relacional, em que existem colunas destinadas a texto, números e dados, numa Object Store, podemos gravar objetos de diferentes formatos, contanto, que sejam válidos no JavaScript. E como fazemos para criar a Object Store? Assim que criarmos o banco, criaremos no onupgradeneeded uma Object Store chamada Negociacoes. Porém, nós só teremos acesso à variável 'connection' no onsuccess - que só é executado depois do onupgradeneeded. Não há problema, também temos acesso à conexão dentro de 'onupgradeneeded', através de 'e.target.result', que atribuiremos à variável minhaConnection:
+Do minhaConnection, chamamos a Object Store que receberá o nome negociacoes. Agora, temos acesso tanto a onupgradeneeded como onsuccess. Vamos recarregar a página e ver com ficou.
+
+o que é o indexedDB
+https://developer.mozilla.org/pt-BR/docs/IndexedDB
+
+-->
