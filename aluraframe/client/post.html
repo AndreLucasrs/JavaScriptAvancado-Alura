@@ -55,8 +55,11 @@
                     inputValor.value = 0.0;
                     inputData.focus();
                     alert('Negociação enviada com sucesso');
-                })
-                .catch(erro => alert(`Não foi possível enviar a negociação: ${erro}`));
+                  })
+                  .catch(erro => {
+                        alert(`Não foi possível enviar a negociação: $(erro)`);
+                        console.log(erro);
+                    });
         }
     </script>
 </body>

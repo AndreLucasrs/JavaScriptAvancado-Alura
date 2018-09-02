@@ -1,6 +1,41 @@
 class HttpService {
+
+	_handleErros(res){
+
+		if(!res.ok) throw new Error(res.statusText);
+		
+		return res;
+	}
 	
 	get(url){
+
+		//Fetch API, uma API de busca do JS
+		//No escopo global, nós iremos adicionar a variável fetch, no HttpService.js. 
+		//O resultado dela está no then(), 
+		//isto significa que o retorno será uma Promise por padrão.
+		//vai chamar a url, então verifica se a resposta é ok se for ok então retorna json ou poderia ser texto se quisesse
+		return fetch(url)
+			.then(res => this._handleErros(res))
+			.then(res => res.json());
+	}
+
+	post(url, dado) {
+
+        return fetch(url, {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'post',
+            body: JSON.stringify(dado)
+        })
+        .then(res => this._handleErros(res))
+	}
+}
+
+
+/*
+
+Codigo antes de usar FETCH API
+
+get(url){
 
 		//Padrão de Projeto Promise
 		return new Promise((resolve,reject) => {
@@ -10,15 +45,15 @@ class HttpService {
 			//isso quer dizer que ele esta preparando pra fazer a requisição, ele não esta fazendo ainda
 			xhr.open("GET",url);
 
-			/*configuração*/
+			configuração
 			//essa função vai ser chamada toda vez que o estado do xhr mudar
-			/* Esses são os estados
+			Esses são os estados
 				0: requisição ainda não iniciada
 				1: conexão com o servidor estabelecida
 				2: requisição recebida
 				3: processando requisição
 				4: requisição está concluída e a resposta está pronta
-			*/
+			
 			xhr.onreadystatechange = () => {
 
 				if(xhr.readyState == 4){
@@ -64,7 +99,8 @@ class HttpService {
                 xhr.send(JSON.stringify(dado)); // usando JSON.stringifly para converter objeto em uma string no formato JSON.
         });
     }	
-}
+
+*/
 
 
 //Promise
