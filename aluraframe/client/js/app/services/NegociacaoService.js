@@ -63,4 +63,76 @@ class NegociacaoService {
         });
     } 
     //sobre o .reduce() http://desenvolvimentoparaweb.com/javascript/map-filter-reduce-javascript/
+
+    cadastra(negociacao){
+
+    	return ConnectionFactory
+            .getConnection()
+            .then(connection => new NegociacaoDao(connection))
+            .then(dao => dao.adiciona(negociacao))
+            .then(() => 'Negociação adicionada com sucesso')
+            .catch(erro => {
+            	console.log(erro);
+            	throw new Error('Não foi possível adicionar a negociação');
+            });
+    }
+
+    lista(){
+
+    	return ConnectionFactory
+            .getConnection()
+            .then(connection => new NegociacaoDao(connection))
+            .then(dao => dao.listaTodos())
+            .catch(erro =>{
+            	console.log(erro);
+            	throw new Error('Não foi possível obter as negociações');
+            });
+
+    }
+
+    apaga(){
+
+    	return ConnectionFactory
+            .getConnection()
+            .then(connection => new NegociacaoDao(connection))
+            .then(dao => dao.apagaTodos())
+            .then(() => 'Negociações apagadas com sucesso')
+            .catch(erro => {
+            	console.log(erro);
+            	throw new Error('Não foi possível apagar as negociações');
+            });
+    }
+
+    importa(listaAtual){
+
+    	return this.obterNegociacoes()
+	        .then(negociacoes => 
+	            negociacoes.filter(negociacao => 
+	                !listaAtual.some(negociacaoExistente => 
+	                    negociacao.isEquals(negociacaoExistente)))
+	        	)
+	        	.catch(erro => {
+
+	        		console.log(erro);
+	        		throw new Error('Não foi possivel importar as negociações');
+	        	}); 
+
+
+        //filter ele ira filtar pela listaNegociacoes e em nogaciacoes ele ira usar o some() pra ve se existe ja negociacao
+        //porque se a gente não usasse isso ele ira comprar 2 objetos que podem ter o mesmo valor mas tem instancias diferentes
+        //A função some() vai varrer cada item da lista verificando se os elementos são iguais ao critério estabelecido
+
+
+        /*
+        Estamos fazendo o filtro que varrerá todos os elementos. 
+        O primeiro array que será testado (this._listaNegociacoes) 
+        verificará se cada item já existente é igual a negociação filtrada. 
+        Caso seja equivalente, o some() retornará "verdadeiro"
+        e o item entrará no filtro de negociações. 
+        Como nosso objetivo é que o some() retorne "verdadeiro", 
+        caso ele siga até o final do array sem encontrar um elemento igual ao filtro, 
+        usaremos o sinal de exclamação (!). Com isto, no próximo encadeamento da função then(), 
+        teremos as negociações que não existem dentro de _listaNegociacoes.negociacoes.
+        */
+    }
 }
