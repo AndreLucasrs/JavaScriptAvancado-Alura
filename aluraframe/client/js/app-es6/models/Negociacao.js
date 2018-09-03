@@ -1,6 +1,6 @@
 //o nome arquivo tem letra maiuscula no começo, para deixar claro que isso é uma classe
 //pode pegar os Conceitos de OO, aprendidos em java e aplicar aqui para o entendimento
-class Negociacao {
+export class Negociacao {
 
 	//metodo construtor
 	constructor(date, quantidade, valor){

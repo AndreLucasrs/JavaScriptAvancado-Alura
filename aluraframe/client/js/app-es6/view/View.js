@@ -1,4 +1,4 @@
-class View{
+export class View{
 
 	constructor(elemento){
 
@@ -15,3 +15,15 @@ class View{
 		this._elemento.innerHTML = this.template(model);
 	}
 }
+
+/*
+
+Porque usar o export
+
+A plataforma Node.js resolveu este problema adotando padrão CommonJS para criação de módulos, 
+ainda há bibliotecas como RequireJS que usam o padrão AMD 
+(Assincronous Module Definition). 
+Contudo, o ES2015 especificou seu próprio sistema de módulos 
+que resolve tanto o problema do escopo global quanto o de carregamento de scripts.
+
+*/

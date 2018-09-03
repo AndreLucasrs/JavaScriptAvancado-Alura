@@ -1,3 +1,12 @@
+import {ListaNegociacoes} from '../models/ListaNegociacoes';
+import {Mensagem} from '../models/Mensagem';
+import {NegociacoesView} from '../view/NegociacoesView';
+import {MensagemView} from '../view/MensagemView';
+import {NegociacaoService} from '../services/NegociacaoService';
+import {DateHelper} from '../helpers/DateHelper';
+import {Bind} from '../helpers/Bind';
+import {Negociacao} from '../models/Negociacao';
+
 class NegociacaoController{
 
 	//OBS para fazer o botão importar negociações funcionar, tem que rodar o server
@@ -121,6 +130,12 @@ class NegociacaoController{
 	}
 }
 
+let negociacaoController = new NegociacaoController();
+export function currentInstance(){
+
+    return negociacaoController;
+}
+
 /*
 Nós programaremos com o ES6 e depois, vamos compilar o código para o ES5. 
 Este processo de downgrade recebe o nome de transcompilação e é feito com o uso de um transpiler 
@@ -138,5 +153,21 @@ E será desta que iremos importar os arquivos do index.html.
 Porém, se tentarmos recarregar a página do formulário agora, 
 ela não funcionará porque nenhum scriptserá encontrado. 
 Veremos como fazer a transcompilação.
+
+*/
+
+/*
+
+OBS
+
+ATENÇÃO: o projeto não possui a pasta aluraframe/client/node_modules e você precisará baixar as dependências abrindo o terminal na pasta aluraframe/client para em seguida executar o comando npm install. Este comando lerá seu arquivo package.json e baixará todas dependências listadas nele. Vá tomar um café enquanto as dependências são baixadas.
+
+ATENÇÃO 2: se você fez testes e foi incrementando a versão do seu banco, será necessário usar um número igual ou superior à versão do banco criado em seu navegador. Para isso, altere aluraframe/client/js/app/services/ConnectionFactory.js para que a variável version utilize a versão correta.
+
+URL
+
+http://localhost:3000
+
+http://localhost:3000/post.html
 
 */

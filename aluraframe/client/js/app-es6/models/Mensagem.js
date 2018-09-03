@@ -1,4 +1,4 @@
-class Mensagem{
+export class Mensagem{
 
 //texto='', isso quer dizer que o valor padrão do parametro é '',
 //vc pode colcar esse valor padrão é metodos, construtores e função

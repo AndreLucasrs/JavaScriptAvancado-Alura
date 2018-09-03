@@ -1,4 +1,6 @@
-class Bind {
+import {ProxyFactory} from '../services/ProxyFactory.js';
+
+export class Bind {
 
 	//REST operator ...props, esses ... é o rest operator
 	//Para gerarmos um array com n parâmetros, devemos usar o REST apenas no último, outro vantajoso recurso do ECMAScript
