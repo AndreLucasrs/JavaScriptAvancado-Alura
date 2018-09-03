@@ -1,35 +1,55 @@
-class HttpService {
+'use strict';
 
-	_handleErros(res){
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-		if(!res.ok) throw new Error(res.statusText);
-		
-		return res;
-	}
-	
-	get(url){
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-		//Fetch API, uma API de busca do JS
-		//No escopo global, nós iremos adicionar a variável fetch, no HttpService.js. 
-		//O resultado dela está no then(), 
-		//isto significa que o retorno será uma Promise por padrão.
-		//vai chamar a url, então verifica se a resposta é ok se for ok então retorna json ou poderia ser texto se quisesse
-		return fetch(url)
-			.then(res => this._handleErros(res))
-			.then(res => res.json());
+var HttpService = function () {
+	function HttpService() {
+		_classCallCheck(this, HttpService);
 	}
 
-	post(url, dado) {
+	_createClass(HttpService, [{
+		key: '_handleErros',
+		value: function _handleErros(res) {
 
-        return fetch(url, {
-            headers: { 'Content-Type': 'application/json' },
-            method: 'post',
-            body: JSON.stringify(dado)
-        })
-        .then(res => this._handleErros(res))
-	}
-}
+			if (!res.ok) throw new Error(res.statusText);
 
+			return res;
+		}
+	}, {
+		key: 'get',
+		value: function get(url) {
+			var _this = this;
+
+			//Fetch API, uma API de busca do JS
+			//No escopo global, nós iremos adicionar a variável fetch, no HttpService.js. 
+			//O resultado dela está no then(), 
+			//isto significa que o retorno será uma Promise por padrão.
+			//vai chamar a url, então verifica se a resposta é ok se for ok então retorna json ou poderia ser texto se quisesse
+			return fetch(url).then(function (res) {
+				return _this._handleErros(res);
+			}).then(function (res) {
+				return res.json();
+			});
+		}
+	}, {
+		key: 'post',
+		value: function post(url, dado) {
+			var _this2 = this;
+
+			return fetch(url, {
+				headers: { 'Content-Type': 'application/json' },
+				method: 'post',
+				body: JSON.stringify(dado)
+			}).then(function (res) {
+				return _this2._handleErros(res);
+			});
+		}
+	}]);
+
+	return HttpService;
+}();
 
 /*
 
@@ -102,7 +122,6 @@ get(url){
 
 */
 
-
 //Promise
 /*
 Parecerá ser um método síncrono.
@@ -114,3 +133,4 @@ Quando pensamos no conceito de uma promessa, nos vem a ideia de que
 "se você cumprir a promessa, então algo irá acontecer...". 
 Seguindo está relação com então, chamaremos o método then() na promise.
 */
+//# sourceMappingURL=HttpService.js.map

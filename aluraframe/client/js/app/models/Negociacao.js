@@ -1,9 +1,17 @@
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 //o nome arquivo tem letra maiuscula no começo, para deixar claro que isso é uma classe
 //pode pegar os Conceitos de OO, aprendidos em java e aplicar aqui para o entendimento
-class Negociacao {
+var Negociacao = function () {
 
 	//metodo construtor
-	constructor(date, quantidade, valor){
+	function Negociacao(date, quantidade, valor) {
+		_classCallCheck(this, Negociacao);
+
 		//o underline _ é uma convensão para o programador, dizendo que essas propriedades
 		//so podem ser acessados pelos proprios metodos da classe, ninguem de fora
 
@@ -22,25 +30,38 @@ class Negociacao {
 	//E mesmo sendo um método, poderemos acessá-lo como uma propriedade.
 	//Mas, debaixo dos panos, ele continuará sendo executado como um método
 	//metodo acessores
-	get volume(){
-		return this._quantidade * this._valor;
-	}
 
-	get data(){
-		return new Date(this._data.getTime());
-	}
 
-	get quantidade(){
-		return this._quantidade;
-	}
+	_createClass(Negociacao, [{
+		key: "isEquals",
+		value: function isEquals(outraNegociacao) {
+			return JSON.stringify(this) == JSON.stringify(outraNegociacao);
+		}
 
-	get valor(){
-		return this._valor;
-	}
+		//JSON.stringify ele serializa nosso objeto e verifica se eles tem o valor igual
 
-	isEquals(outraNegociacao) {        
-        return JSON.stringify(this) == JSON.stringify(outraNegociacao)
-    }
+	}, {
+		key: "volume",
+		get: function get() {
+			return this._quantidade * this._valor;
+		}
+	}, {
+		key: "data",
+		get: function get() {
+			return new Date(this._data.getTime());
+		}
+	}, {
+		key: "quantidade",
+		get: function get() {
+			return this._quantidade;
+		}
+	}, {
+		key: "valor",
+		get: function get() {
+			return this._valor;
+		}
+	}]);
 
-    //JSON.stringify ele serializa nosso objeto e verifica se eles tem o valor igual
-}
+	return Negociacao;
+}();
+//# sourceMappingURL=Negociacao.js.map
